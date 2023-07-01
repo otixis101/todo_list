@@ -7,13 +7,14 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
-model Todo{
-  id String @id @default(uuid())
-  title String
-  complete Boolean
+model Todo {
+  id        String   @id @default(uuid())
+  title     String
+  // description String
+  complete  Boolean
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

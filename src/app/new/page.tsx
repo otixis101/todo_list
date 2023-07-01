@@ -3,6 +3,7 @@ import { prisma } from "../db";
 import { redirect } from "next/navigation";
 
 import { XMarkIcon, ClipboardDocumentListIcon } from '@heroicons/react/24/outline';
+import { revalidatePath } from "next/cache";
 
 //Page -- Create New
 async function createTodo(data: FormData) {
@@ -17,15 +18,16 @@ async function createTodo(data: FormData) {
     await prisma.todo.create({
         data: {
             title,
+            // description,
             complete: false
         }
     })
-
+    revalidatePath('/')
     redirect("/")
 }
 
 
-const page = () => {
+const create = () => {
     return (
         <>
             <header className="flex justify-between items-center mb-4">
@@ -34,8 +36,12 @@ const page = () => {
             <form action={createTodo} className="flex gap-2 flex-col mt-8">
                 <input type="text" name="title"
                     className="bg-emerald-500/5 outline-none text-slate-300 text-sm rounded border-2 border-transparent px-3 py-2 
-                    focus-within:border-emerald-500/10"
+                    focus-within:border-emerald-500/10 max-w-[300px] grow"
                     placeholder="Title of what todo..." required />
+                {/* <input type="text" name="description"
+                    className="bg-emerald-500/5 outline-none text-slate-300 text-sm rounded border-2 border-transparent px-3 py-2 
+                    focus-within:border-emerald-500/10"
+                    placeholder="Description of the task todo..." required /> */}
                 <div className="flex gap-6 justify-end items-center my-2">
                     <Link href=".." className="flex gap-1 items-center text-sm text-slate-300 hover:text-slate-100"> Cancel</Link>
                     <button type="submit" className="flex gap-1 items-center bg-emerald-700 text-sm text-slate-200 px-6 py-2 rounded hover:bg-emerald-600 hover:text-white outline-none">Create <ClipboardDocumentListIcon className="w-4 h-4 text-slate-300" /></button>
@@ -45,4 +51,4 @@ const page = () => {
     )
 }
 
-export default page
+export default create
